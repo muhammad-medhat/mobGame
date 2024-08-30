@@ -39,10 +39,10 @@ export default function GameStart({ pick }) {
           onChangeText={numChange}
         />
         <View style={styles.buttonsContainer}>
-          <View style={styles.btnContainer}>
+          <View style={styles.buttonContainer}>
             <PrimaryButton press={() => setNum(0)}>Reset</PrimaryButton>
           </View>
-          <View style={styles.btnContainer}>
+          <View style={styles.buttonContainer}>
             <PrimaryButton press={confirm}>Confirm</PrimaryButton>
           </View>
         </View>
@@ -50,21 +50,12 @@ export default function GameStart({ pick }) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
-  inputContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+  rootContainer: {
+    flex: 1,
     marginTop: 100,
-    marginHorizontal: 24,
-    padding: 16,
-    backgroundColor: "#3b021f",
-    borderRadius: 8,
-    elevation: 4,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.25,
+    alignItems: "center",
+    // borderWidth: 2,
   },
   numberInput: {
     height: 50,
