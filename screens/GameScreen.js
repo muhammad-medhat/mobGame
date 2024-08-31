@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import Title from "../com/Title";
 import PrimaryButton from "../com/PrimaryButton";
 import NumberText from "../com/NumberText";
+import NumberContainer from "../com/NumberContainer";
 import { Ionicons } from "@expo/vector-icons";
+import Card from "../com/Card";
+import InstructionText from "../com/InstructionText";
+import GuessLogItem from "../com/GuessLogItem";
+
 /**
  *
  * @numInpUser {the gussed number
@@ -17,7 +22,7 @@ export default function Game({ numInpUser, onGameOver }) {
   /** the first mobGuess will exclude the @numInpUser */
   const [nextGuess, setNextGuess] = useState(initRandom);
   const [numRounds, setNumRounds] = useState(0);
-  const [guessNum, setGuessNum] = useState([]);
+  const [guessRounds, setGuessRounds] = useState([]);
 
   function genRndBetween(min, max, exclude = null) {
     const rnd = Math.floor(Math.random() * (max - min)) + min;
@@ -44,7 +49,7 @@ export default function Game({ numInpUser, onGameOver }) {
     }
     const ug = genRndBetween(min, max);
     setNextGuess(ug);
-    setGuessNum((prev) => [ug, ...prev]);
+    setGuessRounds((prev) => [ug, ...prev]);
     console
       .log
       // `ur inp is ${numInpUser}, sugg resulted in ${nextGuess}, Generating between ${min} and ${max}`
@@ -58,32 +63,67 @@ export default function Game({ numInpUser, onGameOver }) {
       onGameOver();
     }
   }, [numInpUser, nextGuess]);
+  const guessRoundsListLength = guessRounds.length;
+
   return (
-    <View style={styles.cont}>
-      <Title>Mobile's Guess</Title>
-      <NumberText>{nextGuess}</NumberText>
+    <View style={styles.screen}>
+      <Title>Opponent's Guess</Title>
+      <NumberContainer>{nextGuess}</NumberContainer>
       <Text style={{ fontFamily: "dsm", fontSize: 24 }}>Higher or Lower?</Text>
       <View style={styles.btns}>
-        <PrimaryButton press={() => nextTempGuess("h")}>
-          <Ionicons color="white" size={24} name="add" />
-        </PrimaryButton>
-        <PrimaryButton press={() => nextTempGuess("l")}>
-          <Ionicons color="white" size={24} name="remove" />
-        </PrimaryButton>
-        {/* {guessNum.map((n) => (
-          <Text key={n}>{n}</Text>
-        ))} */}
+        <Card>
+          <InstructionText style={styles.instructionText}>
+            Higher or lower?
+          </InstructionText>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonContainer}>
+              <PrimaryButton press={nextTempGuess.bind(this, "l")}>
+                <Ionicons name="remove" size={24} color="white" />
+              </PrimaryButton>
+            </View>
+            <View style={styles.buttonContainer}>
+              <PrimaryButton press={nextTempGuess.bind(this, "g")}>
+                <Ionicons name="add" size={24} color="white" />
+              </PrimaryButton>
+            </View>
+          </View>
+        </Card>
       </View>
-      <FlatList
-        data={guessNum}
-        keyExtractor={(item) => item * Math.random()}
-        renderItem={(item) => <Text>{item.item}</Text>}
-      />
+      <View style={styles.listContainer}>
+        <FlatList
+          data={guessRounds}
+          keyExtractor={(item) => item * Math.random()}
+          renderItem={(itemData) => (
+            <GuessLogItem
+              roundNumber={guessRoundsListLength - itemData.index}
+              guess={itemData.item}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    padding: 24,
+  },
+  instructionText: {
+    marginBottom: 12,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+    padding: 16,
+  },
+});
+const styles1 = StyleSheet.create({
   cont: {
     flex: 1,
     justifyContent: "center",

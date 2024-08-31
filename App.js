@@ -53,7 +53,7 @@ export default function App() {
 
   return (
     <LinearGradient
-      colors={[Colors.sec1, Colors.prm1]}
+      colors={[Colors.primary500, Colors.prm1]}
       style={styles.container}>
       <ImageBackground
         source={require("./assets/background.png")}
